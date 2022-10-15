@@ -5,6 +5,21 @@
     <title>Diploma</title>
 </head>
 <body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+<div class="conatiner mt-5">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <input class="form-control" type="file" id="input" accept=".xls,.xlsx"  >
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary" id="button">Convert</button>
+        </div>
+        <div class="col-md-12">
+            <pre id="jsondata"></pre>
+        </div>
+    </div>
+</div>
 <script type="importmap">
 			{
 				"imports": {
@@ -13,6 +28,7 @@
 				}
 			}
 		</script>
+<script src="excel.js"></script>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>
