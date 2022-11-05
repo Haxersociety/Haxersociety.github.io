@@ -1,37 +1,55 @@
 import {Controller} from "../controller.js";
 
-export class Data_controller extends Controller{
+export class Data_controller extends Controller {
 
     main() {
         let selectedFile;
-        console.log(window.XLSX);
         document.getElementById('input').addEventListener("change", (event) => {
             selectedFile = event.target.files[0];
         })
 
-        let data=[{
-            "name":"jayanth",
-            "data":"scd",
-            "abc":"sdef"
+        let data = [{
+            "name": "jayanth",
+            "data": "scd",
+            "abc": "sdef"
         }]
 
         document.getElementById('button').addEventListener("click", () => {
             XLSX.utils.json_to_sheet(data, 'out.xlsx');
-            if(selectedFile){
+            if (selectedFile) {
                 let fileReader = new FileReader();
                 fileReader.readAsBinaryString(selectedFile);
-                fileReader.onload = (event)=>{
+                fileReader.onload = (event) => {
                     let data = event.target.result;
-                    let workbook = XLSX.read(data,{type:"binary"});
+                    let workbook = XLSX.read(data, {type: "binary"});
                     console.log(workbook);
                     workbook.SheetNames.forEach(sheet => {
                         let rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
                         console.log(rowObject);
-                        document.getElementById("jsondata").innerHTML = JSON.stringify(rowObject,undefined,4)
+                        document.getElementById("jsondata").innerHTML = JSON.stringify(rowObject, undefined, 4)
                     });
                 }
             }
         });
+    }
+
+    createInputElement() {
+        let input = document.getElementById('input-data-button')
+
+        if (input)
+            return
+
+        input = document.createElement('input')
+        input.type = 'file';
+        input.id = 'input-data-button';
+        input.accept = '.xls,.xlsx';
+
+        document.body.prepend(input)
+    }
+
+    deleteInputElement() {
+        let input = document.getElementById('input-data-button')
+        document.body.removeChild(input)
     }
 
 }

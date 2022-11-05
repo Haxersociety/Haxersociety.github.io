@@ -1,11 +1,13 @@
 import * as THREE from "../three/build/three.module.js";
 import {OrbitControls} from "../three/examples/jsm/controls/OrbitControls.js";
-import {TextGeometry} from "../three/examples/jsm/geometries/TextGeometry.js";
 import {FontLoader} from "../three/examples/jsm/loaders/FontLoader.js";
 import {Controller} from "../controller.js";
 import {SCREENS} from "../constants.js"
+import {ThreeSimpleFigure} from "../helpers/ThreeSimpleFigure.js";
 
 export class View3d_controller extends Controller {
+
+    intersected_object
 
     init() {
 
@@ -18,7 +20,7 @@ export class View3d_controller extends Controller {
             r + 'pz.jpg', r + 'nz.jpg'
         ];
 
-        const textureCube = new THREE.CubeTextureLoader().load( urls );
+        const textureCube = new THREE.CubeTextureLoader().load(urls);
         textureCube.mapping = THREE.CubeRefractionMapping;
 
         this.scene.background = textureCube;
@@ -30,7 +32,7 @@ export class View3d_controller extends Controller {
         document.body.appendChild(this.renderer.domElement);
 
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
-        this.camera.position.set(400, 200, 0);
+        this.camera.position.set(-200, 50, 200);
 
         // controls
 
@@ -51,11 +53,9 @@ export class View3d_controller extends Controller {
 
         this.generateLight()
 
-        window.addEventListener('resize', this.onWindowResize);
-
         const loader = new FontLoader();
         loader.load('fonts/droid.typeface.json',
-            ( response ) => {
+            (response) => {
                 // do something with the font
                 this.font = response;
                 this.updateText()
@@ -71,30 +71,36 @@ export class View3d_controller extends Controller {
 
         this.pointer = new THREE.Vector2()
 
+        this.initListeners()
+
+    }
+
+    initListeners() {
         let onPointerDown = (event) => {
             this.onPointerDown(event)
         }
-
         let onPointerMove = (event) => {
             this.onPointerMove(event)
         }
+        let resize = () => {
+            this.resize()
+        }
 
-        window.addEventListener( 'pointerdown', onPointerDown );
-
-        window.addEventListener( 'pointermove', onPointerMove );
-
+        window.addEventListener('pointerdown', onPointerDown);
+        window.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('resize', resize);
     }
 
     onPointerDown(event) {
 
-        this.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        this.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-        this.raycaster.setFromCamera( this.pointer, this.camera );
-        const intersects = this.raycaster.intersectObjects( this.scene.children );
-        if ( intersects.length > 0 ) {
+        this.raycaster.setFromCamera(this.pointer, this.camera);
+        const intersects = this.raycaster.intersectObjects(this.scene.children);
+        if (intersects.length > 0) {
 
-            const object = intersects[ 0 ].object;
+            const object = intersects[0].object;
             object.onclick && object.onclick()
             this.render();
 
@@ -103,11 +109,11 @@ export class View3d_controller extends Controller {
     }
 
     onPointerMove(event) {
-        this.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        this.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
     }
 
-    onWindowResize() {
+    resize() {
 
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
@@ -124,61 +130,31 @@ export class View3d_controller extends Controller {
     }
 
     render() {
-
-        // update the picking ray with the camera and pointer position
-        this.raycaster.setFromCamera( this.pointer, this.camera );
-
-        //console.log(this.textGroup.children)
-
-        // calculate objects intersecting the picking ray
-        const intersects = this.raycaster.intersectObjects( this.textGroup.children );
-
-        for ( let i = 0; i < intersects.length; i ++ ) {
-
-            //console.log(intersects[i])
-
-            //intersects[ i ].object.material.color.set( 0xff0000 );
-
-        }
-
+        this.raycaster.setFromCamera(this.pointer, this.camera);
+        //Метод проверки выделенных объектов
+        this.updateIntersect()
         this.renderer.render(this.scene, this.camera);
 
     }
 
     getMainMenu() {
-        let materials = [
-            new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } ), // front
-            new THREE.MeshPhongMaterial( { color: 0xffffff } ) // side
-        ];
-
         let meshes = []
 
-        let download_data_button_geometry = new TextGeometry('Загрузить данные', {
-            font: this.font,
-            size: 30,
-            height: 5,
-            curveSegments: 5,
-            bevelEnabled: true,
-            bevelThickness: 1,
-            bevelSize: 1,
-            bevelOffset: 0,
-            bevelSegments: 5
+        let download_data_group = this.getTextWithBox({
+            text: 'Загрузить данные',
         })
-        let download_data_button_mesh = new THREE.Mesh(download_data_button_geometry, materials);
 
-        download_data_button_mesh.position.x = 0
-        download_data_button_mesh.position.y = 0;
-        download_data_button_mesh.position.z = 0
-
-        download_data_button_mesh.onclick = () => {
-            let randomColor = Math.floor(Math.random()*16777215).toString(16)
-            download_data_button_mesh.material = [
-                new THREE.MeshPhongMaterial( { color: '#' + randomColor, flatShading: true } ), // front
-                new THREE.MeshPhongMaterial( { color: '#' + randomColor } ) // side
-            ]
+        download_data_group.onclick = () => {
+            //TODO При нажатии на загрузить данные открывать окно с выбором xls документа
+        }
+        download_data_group.mouseenter = () => {
+            this.engine.data.createInputElement()
+        }
+        download_data_group.mouseleave = () => {
+            this.engine.data.deleteInputElement()
         }
 
-        meshes.push(download_data_button_mesh)
+        meshes.push(download_data_group)
         return meshes
     }
 
@@ -196,12 +172,16 @@ export class View3d_controller extends Controller {
     //#region Generate
 
     generateWorld() {
-        const geometry = new THREE.PlaneGeometry( 1000, 1000 );
-        const material = new THREE.MeshPhongMaterial( {color: 0xffffff, side: THREE.DoubleSide} );
-        const plane = new THREE.Mesh( geometry, material );
+        const geometry = new THREE.PlaneGeometry(1000, 1000);
+        const material = new THREE.MeshPhongMaterial({color: 0xffffff, side: THREE.DoubleSide});
+        const plane = new THREE.Mesh(geometry, material);
         plane.rotateX(Math.PI / 2)
-        plane.position.set(0, -15, 0)
+        plane.position.set(0, -13, 0)
         this.scene.add(plane);
+
+        const helper = new THREE.GridHelper(1000, 30);
+        helper.position.set(0, -13, 0)
+        this.scene.add(helper);
     }
 
     generateLight() {
@@ -213,6 +193,100 @@ export class View3d_controller extends Controller {
         const ambientLight = new THREE.AmbientLight(0x222222);
         this.scene.add(ambientLight);
 
+    }
+
+    //#endregion
+
+    getSizeObject(object) {
+        let modelBoundingBox;
+
+        modelBoundingBox = new THREE.Box3().setFromObject(object);
+        modelBoundingBox.size = {};
+        modelBoundingBox.size.x = modelBoundingBox.max.x - modelBoundingBox.min.x;
+        modelBoundingBox.size.y = modelBoundingBox.max.y - modelBoundingBox.min.y;
+        modelBoundingBox.size.z = modelBoundingBox.max.z - modelBoundingBox.min.z;
+
+        return modelBoundingBox.size
+    }
+
+    getTextWithBox(params) {
+        let text = params.text || 'Текст без названия';
+        let font = params.font || this.font;
+        let color = params.color || 0xffffff;
+        let text_position = params.text_position || {x: 0, y: 0, z: 0}
+        let text_anchor = params.text_anchor || 1 // 0 - left, 1 - middle, 2 - right;
+
+        let text_geometry = ThreeSimpleFigure.getTextGeometry({
+            text,
+            font,
+        })
+        let text_mesh = new THREE.Mesh(text_geometry, new THREE.MeshPhongMaterial({color, flatShading: true}));
+
+        let size = this.getSizeObject(text_mesh);
+
+        text_mesh.position.x = text_position.x + text_anchor === 1 ? -size.x / 2 : !text_anchor ? 0 : -size.x
+        text_mesh.position.y = text_position.y
+        text_mesh.position.z = text_position.z
+
+
+        let box_geometry = ThreeSimpleFigure.getBoxGeometry({
+            width: size.x,
+            height: size.y,
+            depth: size.z,
+        })
+        let box_mesh = new THREE.Mesh(box_geometry, new THREE.MeshPhongMaterial({color, flatShading: true}));
+        box_mesh.material.transparent = true
+        box_mesh.material.opacity = 0
+
+        box_mesh.position.x = text_position.x
+        box_mesh.position.y = text_position.y + 10.5
+        box_mesh.position.z = text_position.z + 2.5
+
+
+        let group_mesh = new THREE.Group()
+        group_mesh.add(text_mesh)
+        group_mesh.add(box_mesh)
+
+        return group_mesh
+
+    }
+
+    //#region Update Intersects
+
+    updateIntersect() {
+        switch (this.panel) {
+            case SCREENS.MAIN_MENU:
+                this.updateMainMenuIntersect()
+                break
+        }
+    }
+
+    updateMainMenuIntersect() {
+        const intersects = this.raycaster.intersectObjects(this.textGroup.children);
+
+        if (intersects.length > 0) {
+
+            if (this.intersected_object?.parent !== intersects[0].object.parent) {
+
+                if (this.intersected_object) this.intersected_object.material.emissive.setHex(this.intersected_object.currentHex);
+
+                this.intersected_object = intersects[0].object;
+                this.intersected_object.parent.children[0].currentHex = this.intersected_object.material.emissive.getHex();
+                this.intersected_object.parent.children[0].material.emissive.setHex(0x444220);
+                this.intersected_object.parent.mouseenter && this.intersected_object.parent.mouseenter()
+
+
+            }
+
+        } else {
+
+            if (this.intersected_object) {
+                this.intersected_object.parent.mouseleave && this.intersected_object.parent.mouseleave()
+                this.intersected_object.parent.children[0].material.emissive.setHex(this.intersected_object.parent.children[0].currentHex);
+                this.intersected_object = null;
+            }
+
+        }
     }
 
     //#endregion

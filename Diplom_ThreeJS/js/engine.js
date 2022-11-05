@@ -5,19 +5,19 @@ export class Engine {
 
     constructor() {
 
-        this.DataController = new Data_controller(this)
-        this.View3DController = new View3d_controller(this)
+        this.data = new Data_controller(this)
+        this.view3D = new View3d_controller(this)
 
     }
 
     init() {
-        this.DataController.init && this.DataController.init()
-        this.View3DController.init && this.View3DController.init()
+        this.data.init && this.data.init()
+        this.view3D.init && this.view3D.init()
     }
 
     update() {
-        this.DataController.update && this.DataController.update()
-        this.View3DController.update && this.View3DController.update()
+        this.data.update && this.data.update()
+        this.view3D.update && this.view3D.update()
     }
 
 }

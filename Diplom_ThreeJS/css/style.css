@@ -1,0 +1,13 @@
+body {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+}
+
+#input-data-button {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    position: absolute;
+}
