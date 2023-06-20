@@ -1,0 +1,48 @@
+{
+  "name": "haxersociety.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Haxersociety/Haxersociety.github.io.git"
+  },
+  "author": "Leonid Kostylev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Haxersociety/Haxersociety.github.io/issues"
+  },
+  "homepage": "https://github.com/Haxersociety/Haxersociety.github.io#readme",
+  "devDependencies": {
+    "@types/three": "^0.149.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "filemanager-webpack-plugin": "^8.0.0",
+    "path": "^0.12.7",
+    "style-loader": "^3.3.1",
+    "three": "^0.150.1",
+    "troika-three-text": "^0.47.1",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.5",
+    "webpack": "5.76.0",
+    "webpack-cli": "^5.0.1",
+    "schema-utils": "^4.2.0",
+    "webpack-dev-server": "^4.11.1",
+    "node-fetch": "^2.6.0",
+    "globby": "^13.2.0"
+  },
+  "dependencies": {
+    "convert-excel-to-json": "^1.7.0",
+    "html-webpack-plugin": "^5.5.0",
+    "prettier": "^2.8.4",
+    "three": "^0.150.1",
+    "troika-3d": "^0.47.0",
+    "troika-three-text": "^0.47.1",
+    "schema-utils": "^4.2.0",
+    "globby": "^13.2.0"
+  }
+}
