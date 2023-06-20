@@ -1,0 +1,129 @@
+body {
+    margin: 0;
+    background-color: #000;
+    color: #fff;
+    font-family: Monospace, serif;
+    font-size: 13px;
+    line-height: 24px;
+    overscroll-behavior: none;
+    overflow: hidden;
+}
+
+.navigation-bar {
+    height: 50px;
+    position: absolute;
+}
+
+.download-window {
+    height: 50%;
+    width: 50%;
+    left: 25%;
+    top: 25%;
+    background-color: white;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.close-button {
+    display: flex;
+    justify-content: end;
+    fill: black;
+    padding: 5px;
+    margin-bottom: auto;
+    margin-left: auto;
+}
+
+.close-button:hover {
+    background-color: #ee2222;
+}
+
+.drop-container {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: calc(100% - 80px);
+
+}
+
+.drop-message {
+    font-size: 18px;
+    color: #888;
+}
+
+.download-input {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: cadetblue;
+}
+
+.drop-container.drag-over {
+    border-color: #f00;
+}
+
+.img-select-graph {
+    width: 100px;
+    height: 100px;
+}
+
+.select-graph-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+    justify-items: center; /* Горизонтальное выравнивание по центру */
+    border: 2px #333 dashed;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+}
+
+.select-graph-item img {
+    height: 50%;
+    padding: 5%;
+}
+
+.select-graph-item p {
+    padding: 5%;
+    height: 30%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.select-graph-item:hover {
+    max-width: 100%; /* Добавлено, чтобы изображение не выходило за пределы родительского элемента */
+    border: 2px #222 solid;
+}
+
+.select-graph-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    align-content: space-between;
+    grid-gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.choose-graph-container {
+    width: 100%;
+    padding: 10px;
+}
+
+.choose-graph-container p {
+    color: black;
+    font-size: 20pt;
+    text-align-last: center;
+}

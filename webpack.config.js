@@ -25,13 +25,13 @@ module.exports = {
       filename: "index.html",
       inject: true,
     }),
-    new FileManagerPlugin({
-      events: {
-        onStart: {
-          delete: ["dist"],
-        },
-      },
-    }),
+    // new FileManagerPlugin({
+    //   events: {
+    //     onStart: {
+    //       delete: ["dist"],
+    //     },
+    //   },
+    // }),
     new CopyWebpackPlugin({
       patterns: [
         { from: 'src/style.css', to: 'style.css' },
