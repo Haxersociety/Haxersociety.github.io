@@ -1,6 +1,5 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const FileManagerPlugin = require("filemanager-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -25,13 +24,6 @@ module.exports = {
       filename: "index.html",
       inject: true,
     }),
-    // new FileManagerPlugin({
-    //   events: {
-    //     onStart: {
-    //       delete: ["dist"],
-    //     },
-    //   },
-    // }),
     new CopyWebpackPlugin({
       patterns: [
         { from: 'src/style.css', to: 'style.css' },

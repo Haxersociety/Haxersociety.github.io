@@ -35,6 +35,8 @@ export class PrimitiveUtils {
     const height = options.height || width;
     const depth = options.depth || width;
 
+    position.y = 0
+
     const positions = [
       position.clone().add(new Vector3(width / 2, 0, depth / 2)),
       position.clone().add(new Vector3(width / 2, 0, -depth / 2)),
@@ -47,77 +49,90 @@ export class PrimitiveUtils {
       depth: 0.1,
       material: new MeshStandardMaterial({ color: 0x000000 }),
     };
+
+    const verticalStroke = new Group()
+    verticalStroke.position.y = height / 2
+    group.add(verticalStroke)
+
+    const topStroke = new Group()
+    topStroke.position.y = height
+    group.add(topStroke)
+
+    const bottomStroke = new Group()
+    group.add(bottomStroke)
+
     for (let position of positions) {
       const meshStroke = PrimitiveUtils.getParallelepipedMesh({
         ...optionsStroke,
         position,
       });
-      group.add(meshStroke);
+      verticalStroke.add(meshStroke);
     }
+
 
     const topStrokeMesh1 = PrimitiveUtils.getParallelepipedMesh({
       ...optionsStroke,
       height: depth,
-      position: position.clone().add(new Vector3(width / 2, height / 2, 0)),
+      position: position.clone().add(new Vector3(width / 2, 0, 0)),
     });
     topStrokeMesh1.rotateX(Math.PI / 2);
-    group.add(topStrokeMesh1);
+    topStroke.add(topStrokeMesh1);
 
     const topStrokeMesh2 = PrimitiveUtils.getParallelepipedMesh({
       ...optionsStroke,
       height: depth,
-      position: position.clone().add(new Vector3(-width / 2, height / 2, 0)),
+      position: position.clone().add(new Vector3(-width / 2, 0, 0)),
     });
     topStrokeMesh2.rotateX(Math.PI / 2);
-    group.add(topStrokeMesh2);
+    topStroke.add(topStrokeMesh2);
 
     const topStrokeMesh3 = PrimitiveUtils.getParallelepipedMesh({
       ...optionsStroke,
       height: width,
-      position: position.clone().add(new Vector3(0, height / 2, depth / 2)),
+      position: position.clone().add(new Vector3(0, 0, depth / 2)),
     });
     topStrokeMesh3.rotateZ(Math.PI / 2);
-    group.add(topStrokeMesh3);
+    topStroke.add(topStrokeMesh3);
 
     const topStrokeMesh4 = PrimitiveUtils.getParallelepipedMesh({
       ...optionsStroke,
       height: width,
-      position: position.clone().add(new Vector3(0, height / 2, -depth / 2)),
+      position: position.clone().add(new Vector3(0, 0, -depth / 2)),
     });
     topStrokeMesh4.rotateZ(Math.PI / 2);
-    group.add(topStrokeMesh4);
+    topStroke.add(topStrokeMesh4);
 
     const bottomStrokeMesh1 = PrimitiveUtils.getParallelepipedMesh({
       ...optionsStroke,
       height: depth,
-      position: position.clone().add(new Vector3(width / 2, -height / 2, 0)),
+      position: position.clone().add(new Vector3(width / 2, 0, 0)),
     });
     bottomStrokeMesh1.rotateX(Math.PI / 2);
-    group.add(bottomStrokeMesh1);
+    bottomStroke.add(bottomStrokeMesh1);
 
     const bottomStrokeMesh2 = PrimitiveUtils.getParallelepipedMesh({
       ...optionsStroke,
       height: depth,
-      position: position.clone().add(new Vector3(-width / 2, -height / 2, 0)),
+      position: position.clone().add(new Vector3(-width / 2, 0, 0)),
     });
     bottomStrokeMesh2.rotateX(Math.PI / 2);
-    group.add(bottomStrokeMesh2);
+    bottomStroke.add(bottomStrokeMesh2);
 
     const bottomStrokeMesh3 = PrimitiveUtils.getParallelepipedMesh({
       ...optionsStroke,
       height: width,
-      position: position.clone().add(new Vector3(0, -height / 2, depth / 2)),
+      position: position.clone().add(new Vector3(0, 0, depth / 2)),
     });
     bottomStrokeMesh3.rotateZ(Math.PI / 2);
-    group.add(bottomStrokeMesh3);
+    bottomStroke.add(bottomStrokeMesh3);
 
     const bottomStrokeMesh4 = PrimitiveUtils.getParallelepipedMesh({
       ...optionsStroke,
       height: width,
-      position: position.clone().add(new Vector3(0, -height / 2, -depth / 2)),
+      position: position.clone().add(new Vector3(0, 0, -depth / 2)),
     });
     bottomStrokeMesh4.rotateZ(Math.PI / 2);
-    group.add(bottomStrokeMesh4);
+    bottomStroke.add(bottomStrokeMesh4);
 
     return group;
   }
@@ -162,7 +177,7 @@ export class PrimitiveUtils {
     options.position && text.position.copy(options.position);
     options.rotation && text.rotation.copy(options.rotation);
     text.anchorX = options.anchorX || "left";
-    text.color = options.color || 0x0000aa;
+    text.color = options.color || 0x000000;
 
     text.sync();
     return text;

@@ -4,12 +4,14 @@ import {
   Color,
   DirectionalLight,
   DoubleSide,
+  Fog,
   FrontSide,
   GridHelper,
   Group,
   Mesh,
   MeshStandardMaterial,
   Object3D,
+  PCFSoftShadowMap,
   PerspectiveCamera,
   Plane,
   PlaneGeometry,
@@ -17,15 +19,17 @@ import {
   WebGLRenderer,
 } from "three";
 
-import {
-  MapControls,
-  OrbitControls,
-} from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { MouseController } from "./controllers/mouse_controller";
 import { KeyboardController } from "./controllers/keyboard_controller";
 import { UIController } from "./controllers/ui_controller";
-import {GRAPH_CONTAINER_NAME, GRAPH_TYPE, LOADING_XLSX_FILE} from "./utils/constants";
+import {
+  GRAPH_CONTAINER_NAME,
+  GRAPH_TYPE,
+  LOADING_XLSX_FILE,
+} from "./utils/constants";
 import { DiagramsUtils } from "./utils/diagrams_utils";
+import { MapControls } from "three/examples/jsm/controls/MapControls";
 
 export class App {
   scene: Scene;
@@ -57,6 +61,8 @@ export class App {
 
     this.renderer = new WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = PCFSoftShadowMap;
 
     this.uiController = new UIController();
     this.uiController.setCallbackDrawGraph(this.drawGraph);
@@ -69,6 +75,7 @@ export class App {
     document.body.appendChild(this.renderer.domElement);
 
     this.control = new MapControls(this.camera, this.renderer.domElement);
+    this.control.target.setY(5);
     this.control.update();
 
     const onWindowResize = () => {
@@ -94,29 +101,19 @@ export class App {
     const grid = new GridHelper(500, 100);
     this.scene.add(grid);
 
-    const planeGeometry = new PlaneGeometry(500, 500);
-    const plane = new Mesh(
-      planeGeometry,
-      new MeshStandardMaterial({ color: 0xffffff })
-    );
-    plane.position.set(0, -0.01, 0);
-    plane.rotateX(Math.PI / 2);
-    plane.material.side = BackSide;
-    plane.material.clipShadows = true;
-    plane.material.flatShading = true;
-    plane.visible = false;
-    this.scene.add(plane);
+    this.scene.fog = new Fog(0xffffff, 1, 150);
 
     this.graphContainer = new Group();
-    this.graphContainer.name = GRAPH_CONTAINER_NAME
+    this.graphContainer.name = GRAPH_CONTAINER_NAME;
     this.scene.add(this.graphContainer);
 
-    const ambientLight = new AmbientLight(0xffffff, 0.7);
+    const ambientLight = new AmbientLight(0xffffff, 0.6);
     this.scene.add(ambientLight);
 
-    const directionLight = new DirectionalLight(0xffffff, 0.4);
-    directionLight.position.set(-100, 100, -100);
+    const directionLight = new DirectionalLight(0xffffff, 0.6);
+    directionLight.position.set(-20, 20, 20);
     directionLight.target = new Object3D();
+    directionLight.castShadow = true;
     this.scene.add(directionLight);
   }
 
@@ -157,6 +154,12 @@ export class App {
         break;
       case GRAPH_TYPE.PIE_CHARTS:
         this.diagramsUtils.drawPieCharts(this.graphData, this.graphContainer);
+        break;
+      case GRAPH_TYPE.ANIM_BAR_GRAPH:
+        this.diagramsUtils.drawAnimBarGraph(
+          this.graphData,
+          this.graphContainer
+        );
         break;
     }
   };

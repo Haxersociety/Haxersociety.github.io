@@ -55,10 +55,13 @@ export class SelectionUtils {
         this.selectedMesh = object;
         this.selectedMeshMaterial = this.preSelectedMeshMaterial;
         object.material = this.selectMaterial;
-        this.text.text = object.userData.textForClue || '';
-        this.text.position.x = object.position.x - 0.2;
+        this.text.text = object.userData.textForClue || "";
+        this.text.font =
+          "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5g.woff";
+        this.text.position.x = object.position.x;
         this.text.position.y = object.position.y + 0.2;
         this.text.position.z = object.position.z;
+        this.text.anchorX = "center";
         this.text.visible = true;
         this.text.sync();
       }

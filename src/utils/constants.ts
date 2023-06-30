@@ -10,4 +10,5 @@ export const GRAPH_TYPE = {
   LINE_CHART: 3,
   MULTI_AXIS_CHARTS: 4,
   PIE_CHARTS: 5,
+  ANIM_BAR_GRAPH: 6,
 };

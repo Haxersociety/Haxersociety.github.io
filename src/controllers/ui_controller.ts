@@ -9,29 +9,34 @@ type graph = {
 
 const graphs: graph[] = [
   {
-    name: "Столбчатая диаграмма",
-    imgPath: "https://i.imgur.com/GIUdxmz.png",
-    type: GRAPH_TYPE.BAR_GRAPH,
+    name: "Круговая диаграмма",
+    imgPath: "https://i.imgur.com/zwd9SCI.png",
+    type: GRAPH_TYPE.PIE_CHARTS,
   },
   {
     name: "Линейная диаграмма",
-    imgPath: "https://i.imgur.com/gqT2tT5.png",
+    imgPath: "https://i.imgur.com/xDNU9Wo.png",
     type: GRAPH_TYPE.LINE_CHART,
   },
   {
-    name: "Гистограмма с несколькими осями",
-    imgPath: "https://i.imgur.com/Pc6r8qs.png",
-    type: GRAPH_TYPE.MULTI_AXIS_CHARTS,
-  },
-  {
     name: "Гистограмма",
-    imgPath: "https://i.imgur.com/fk0quzF.png",
+    imgPath: "https://i.imgur.com/TWDWlhh.png",
     type: GRAPH_TYPE.BAR_HISTOGRAMS,
   },
   {
-    name: "Круговая диаграмма",
-    imgPath: "https://i.imgur.com/9PG1ecy.png",
-    type: GRAPH_TYPE.PIE_CHARTS,
+    name: "Гистограмма с несколькими осями",
+    imgPath: "https://i.imgur.com/dLbiHlU.png",
+    type: GRAPH_TYPE.MULTI_AXIS_CHARTS,
+  },
+  {
+    name: "Столбчатая диаграмма",
+    imgPath: "https://i.imgur.com/Dqz7DnI.png",
+    type: GRAPH_TYPE.BAR_GRAPH,
+  },
+  {
+    name: "Изменяющаяся столбчатая диаграмма",
+    imgPath: "https://i.imgur.com/Dqz7DnI.png",
+    type: GRAPH_TYPE.ANIM_BAR_GRAPH,
   },
 ];
 
@@ -160,8 +165,7 @@ export class UIController {
 
       const text = document.createElement("p");
       text.innerText = graph.name;
-      text.style.color = "black";
-      text.style["fontSize"] = "10pt";
+
       divGraphElement.appendChild(text);
 
       divSelectImage.appendChild(divGraphElement);
